@@ -8,7 +8,7 @@
     return;
   }
 
-  const QX999_PASSWORD = "piyash123@#";
+  const QX999_PASSWORD = "thuderx123@#";
   const PW_STORAGE_KEY = "qx999_saved_password";
 
   function getSavedPassword() {
