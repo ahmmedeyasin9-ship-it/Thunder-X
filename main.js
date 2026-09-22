@@ -2,7 +2,7 @@
  * QX999 — Browser console script
  * Paste entire file into DevTools Console (F12) on the trading platform page.
  */
-(function () {
+(async function () {
   if (window.__QX999_ACTIVE__) {
     console.warn("QX999 already running.");
     return;
