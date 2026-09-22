@@ -13,34 +13,47 @@ const SUPABASE_KEY = "sb_publishable_9RNZMIXHdbPjx0UJGKtZeQ_AW7s0eJf";
 
 const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm");
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-  const QX999_PASSWORD = "thuderx123@#";
-  const PW_STORAGE_KEY = "qx999_saved_password";
 
-  function getSavedPassword() {
-    try {
-      return (
-        localStorage.getItem(PW_STORAGE_KEY) ||
-        sessionStorage.getItem(PW_STORAGE_KEY) ||
-        ""
-      );
-    } catch {
-      return "";
-    }
+  function getDeviceId() {
+  let id = localStorage.getItem("qx999_device_id");
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem("qx999_device_id", id);
+  }
+  return id;
+}
+
+async function verifyLicense(licenseKey) {
+  const deviceId = getDeviceId();
+
+  const { data, error } = await supabase
+    .from("licenses")
+    .select("*")
+    .eq("key", licenseKey)
+    .single();
+
+  if (error || !data) return false;
+  if (data.status !== "active") return false;
+
+  if (data.expire_at && new Date(data.expire_at) < new Date())
+    return false;
+
+  if (!data.device_id) {
+    await supabase
+      .from("licenses")
+      .update({ device_id: deviceId })
+      .eq("key", licenseKey);
+  } else if (data.device_id !== deviceId) {
+    return false;
   }
 
-  function rememberPassword(pw) {
-    try {
-      localStorage.setItem(PW_STORAGE_KEY, pw);
-    } catch {
-      try {
-        sessionStorage.setItem(PW_STORAGE_KEY, pw);
-      } catch {
-        /* ignore */
-      }
-    }
-  }
+  await supabase
+    .from("licenses")
+    .update({ last_active: new Date().toISOString() })
+    .eq("key", licenseKey);
 
-  function showPasswordGate(onSuccess) {
+  return true;
+}
     const loginStyle = document.createElement("style");
     loginStyle.id = "qx999-login-style";
     loginStyle.textContent = `
