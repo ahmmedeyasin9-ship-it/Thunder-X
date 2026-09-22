@@ -893,4 +893,5 @@ async function verifyLicense(licenseKey) {
     }
   });
 }
+showLicenseGate(initQX999);
 })();
