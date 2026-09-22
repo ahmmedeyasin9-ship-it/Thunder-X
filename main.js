@@ -8,6 +8,11 @@
     return;
   }
 
+  const SUPABASE_URL = "https://irytpkgjmczwwgqenyxx.supabase.co";
+const SUPABASE_KEY = "sb_publishable_9RNZMIXHdbPjx0UJGKtZeQ_AW7s0eJf";
+
+const { createClient } = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm");
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
   const QX999_PASSWORD = "thuderx123@#";
   const PW_STORAGE_KEY = "qx999_saved_password";
 
