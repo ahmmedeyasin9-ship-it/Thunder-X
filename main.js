@@ -880,5 +880,17 @@ async function verifyLicense(licenseKey) {
   );
   }
 
-  showPasswordGate(initQX999);
+  function showLicenseGate(onSuccess) {
+  const license = prompt("Enter License Key");
+
+  if (!license) return;
+
+  verifyLicense(license).then(ok => {
+    if (ok) {
+      onSuccess();
+    } else {
+      alert("Invalid, Expired or Blocked License!");
+    }
+  });
+}
 })();
